@@ -1,0 +1,138 @@
+{% extends 'default.html.twig' %}
+
+{% block title %}
+    Inicio
+{% endblock %}
+
+{% block titlePage %}
+    Inicio - PragaNote
+{% endblock %}
+
+{% block menu %}
+{% if is_granted('IS_AUTHENTICATED_FULLY') %}
+<li><a class="button waves-effect waves-dark" href="{{ path('crear_libreta') }}"><span class="glyphicon glyphicon-book"></span><b>Crear Libreta</b></a></li>
+<li><a class="button waves-effect waves-dark" href="{{ path('crear_nota') }}"><span class="glyphicon glyphicon-unchecked"></span><b>Crear Nota</b></a></li>
+<li><a class="dropdown-button waves-effect waves-dark" href="#" data-activates="dropdown1"><span class="glyphicon glyphicon-user"></span><b>{{ app.user.username }}</b><i class="material-icons right">arrow_drop_down</i></a></li>
+<li></li>
+<li></li>
+
+<ul id="dropdown1" class="dropdown-content">
+<li><a href="{{ path('logout') }}"><i class="fa fa-sign-out fa-fw"></i> Cerrar Sesión</a>
+</li>
+</ul>
+{% endif %}
+{% endblock %}
+
+{% block body %}
+
+{% if render == 1 %}
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-action">
+          Mis libretas creadas
+      </div>
+    <div class="card-content">
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+           <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Ver Notas</th>
+                    <th>Eliminar</th>
+                </tr>
+          </thead>
+          <tbody>
+            {% for libreta in libretas %}
+              <tr>
+                  <td>{{ libreta.nombre }}</td>
+                  <td>{{ libreta.descripcion }}</td>
+                  <td>
+                    <a class="btn btn-succes" href="{{ path('notas', {'idLibreta' : libreta.id}) }}">Ver Notas</a>
+                  </td>
+                  <td>
+                    <a class="btn btn-danger" href="{{ path('borrar_libreta', {'idLibreta' : libreta.id}) }}">Eliminar</a>
+                  </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+      </div>
+
+    </div>
+    </div>
+  </div>
+</div>
+
+{% elseif render == 2 %}
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+    <div class="card-content">
+
+                {{ form_start(formLibreta) }}
+                {{ form_widget(formLibreta) }}
+                {{ form_end(formLibreta) }}
+    </div>
+    </div>
+  </div>
+</div>
+
+{% elseif render == 3 %}
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+    <div class="card-content">
+
+                {{ form_start(formNota) }}
+                {{ form_widget(formNota) }}
+                {{ form_end(formNota) }}
+    </div>
+    </div>
+  </div>
+</div>
+
+{% elseif render == 4 %}
+
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-action">
+          {{ libreta.nombre }}
+      </div>
+    <div class="card-content">
+      <div class="table-responsive">
+        <table class="table table-striped table-bordered table-hover">
+           <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Ver</th>
+                    <th>Eliminar</th>
+                </tr>
+          </thead>
+          <tbody>
+            {% for nota in notas %}
+              <tr>
+                  <td>{{ nota.nota }}</td>
+                  <td>
+                    <a class="btn btn-succes" href="{{ path('actualizar_nota', {'idNota': nota.id}) }}">Ver Nota</a>
+                  </td>
+                  <td>
+                    <a class="btn btn-danger" href="{{ path('borrar_nota', {'idNota': nota.id}) }}">Eliminar</a>
+                  </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+      </div>
+
+    </div>
+    </div>
+  </div>
+</div>
+
+{% endif %}
+
+{% endblock %}
