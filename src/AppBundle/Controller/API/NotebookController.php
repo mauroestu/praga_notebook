@@ -31,7 +31,7 @@ class NotebookController extends FOSRestController
     }
 
     /**
-     * @param Request $request
+     * @param Request $requestw
      *
      * @Rest\Post("/user/")
      */
