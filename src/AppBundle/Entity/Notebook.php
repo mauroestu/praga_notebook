@@ -156,11 +156,11 @@ class Notebook
     /**
      * Set user
      *
-     * @param \AppBundle\Entity\Users $user
+     * @param \AppBundle\Entity\User $user
      *
      * @return Notebook
      */
-    public function setUser(\AppBundle\Entity\Users $user = null)
+    public function setUser(\AppBundle\Entity\User $user = null)
     {
         $this->user = $user;
 
@@ -170,7 +170,7 @@ class Notebook
     /**
      * Get user
      *
-     * @return \AppBundle\Entity\Users
+     * @return \AppBundle\Entity\User
      */
     public function getUser()
     {

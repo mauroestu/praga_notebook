@@ -31,39 +31,44 @@ class NotebookController extends FOSRestController
     }
 
     /**
-     * @param Request $requestw
      *
-     * @Rest\Post("/user/")
+     * @Rest\Get("/api/get")
+     */
+    public function getNotebookAction()
+    {
+        $restresult = $this->getDoctrine()->getRepository('AppBundle:Notebook')->findAll();
+
+        if ($restresult == null) {
+          return new View(array("message" => "There are not Notebooks to show."), Response::HTTP_NOT_FOUND);
+        }
+
+        return new View($restresult, Response::HTTP_OK);
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @Rest\Post("/api/post")
      */
     public function postNotebookAction(Request $request)
     {
         $notebook = new Notebook();
-        $form = $this->createForm(new NotebookType(), $notebook);
-        $notebook->setEnabled(true);
-        $notebook->setUser($this->getUser());
-        $em = $this->getDoctrine()->getEntityManager();
-        $type = $em->getRepository("AppBundle:Type")->find(Type::CONST_MENTAL_NOTE);
+        $name = $request->get('name');
+        $description = $request->get('description');
+        $user = $this->getUser();
+        $idType = $request->get('type');
+        $type = $this->getDoctrine()->getRepository('AppBundle:Type')->find($idType);
+
+        $notebook->setName($name);
+        $notebook->setDescription($description);
+        $notebook->setUser($user);
         $notebook->setType($type);
-        $form->handleRequest($request);
+        $notebook->setEnabled(true);
 
-        if($form->isSubmitted() && $form->isValid())
-        {
-            $EntityManager = $this->getDoctrine()->getManager();
-            $EntityManager->persist($notebook);
-            $EntityManager->flush();
+        $EntityManager = $this->getDoctrine()->getManager();
+        $EntityManager->persist($notebook);
+        $EntityManager->flush();
 
-            $data = array("notebook" => $notebook);
-
-            $status = Response::HTTP_CREATED;
-            $view = $this->view($data, $status);
-
-            return $this->handleView($view);
-        }
-        $data = array("form" => $form);
-
-        $status = Response::HTTP_BAD_REQUEST;
-        $view = $this->view($data, $status);
-
-        return $this->handleView($view);
+        return new View(array("message" => "Notebook Created"), Response::HTTP_OK);
     }
 }

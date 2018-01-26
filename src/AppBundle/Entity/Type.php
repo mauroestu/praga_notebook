@@ -133,7 +133,7 @@ class Type
      *
      * @return Type
      */
-    public function addNotebook(\LibretaBundle\Entity\Notebook $notebook)
+    public function addNotebook(\AppBundle\Entity\Notebook $notebook)
     {
         $this->notebooks[] = $notebook;
 
