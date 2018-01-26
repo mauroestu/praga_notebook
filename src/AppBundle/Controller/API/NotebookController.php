@@ -16,7 +16,11 @@ use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
+/**
+ * @Security("is_granted('ROLE_USER')")
+ */
 class NotebookController extends FOSRestController
 {
     /**
@@ -32,7 +36,7 @@ class NotebookController extends FOSRestController
 
     /**
      *
-     * @Rest\Get("/api/get")
+     * @Rest\Get("/api/get", name="get_notebooks")
      */
     public function getNotebookAction()
     {
