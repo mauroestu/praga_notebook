@@ -7,7 +7,7 @@ use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * User
+ * Users
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
@@ -63,7 +63,7 @@ class User extends BaseUser
     /**
      * Remove notebook
      *
-     * @param \AppBundle\Entity\Notebook $libreta
+     * @param \AppBundle\Entity\Notebook $notebook
      */
     public function removeNotebook(\AppBundle\Entity\Notebook $notebook)
     {

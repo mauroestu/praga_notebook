@@ -8,13 +8,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 use AppBundle\Entity\Notebook;
+use AppBundle\Entity\Type;
 use AppBundle\Form\NotebookType;
 
-use Nelmio\ApiDocBundle\Annotation\Model;
-use Swagger\Annotations as SWG;
+use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
-use FOS\RestBundle\Controller\Annotations\Get;
-use FOS\RestBundle\Controller\Annotations\Post;
+use FOS\RestBundle\View\View;
+
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 
 class NotebookController extends FOSRestController
 {
@@ -30,26 +31,19 @@ class NotebookController extends FOSRestController
     }
 
     /**
-     * Create a new Notebook
+     * @param Request $request
      *
-     * @Route("/api/notebook", methods={"POST"})
-     * @SWG\Response(
-     *     response=200,
-     *     description="Create a new Notebook",
-     *     @SWG\Schema(
-     *         type="array",
-     *         @Model(type=Notebook::class)
-     *     )
-     * )
-     *
-     * @SWG\Tag(name="rewards")
+     * @Rest\Post("/user/")
      */
     public function postNotebookAction(Request $request)
     {
         $notebook = new Notebook();
+        $form = $this->createForm(new NotebookType(), $notebook);
         $notebook->setEnabled(true);
         $notebook->setUser($this->getUser());
-        $form = $this->createForm(new NotebookType(), $task);
+        $em = $this->getDoctrine()->getEntityManager();
+        $type = $em->getRepository("AppBundle:Type")->find(Type::CONST_MENTAL_NOTE);
+        $notebook->setType($type);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid())
@@ -65,7 +59,7 @@ class NotebookController extends FOSRestController
 
             return $this->handleView($view);
         }
-        $data = array("fomr" => $form);
+        $data = array("form" => $form);
 
         $status = Response::HTTP_BAD_REQUEST;
         $view = $this->view($data, $status);
