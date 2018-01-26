@@ -18,9 +18,7 @@ use FOS\RestBundle\View\View;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
-/**
- * @Security("is_granted('ROLE_USER')")
- */
+
 class NotebookController extends FOSRestController
 {
     /**
@@ -36,17 +34,20 @@ class NotebookController extends FOSRestController
 
     /**
      *
-     * @Rest\Get("/api/get", name="get_notebooks")
+     * @Route("/api")
      */
     public function getNotebookAction()
     {
-        $restresult = $this->getDoctrine()->getRepository('AppBundle:Notebook')->findAll();
+        $data = array("hello" => "world");
+        $view = $this->view($data);
+        return $this->handleView($view);
+        /*$restresult = $this->getDoctrine()->getRepository('AppBundle:Notebook')->findAll();
 
         if ($restresult == null) {
           return new View(array("message" => "There are not Notebooks to show."), Response::HTTP_NOT_FOUND);
         }
 
-        return new View($restresult, Response::HTTP_OK);
+        return new View($restresult, Response::HTTP_OK);*/
     }
 
     /**

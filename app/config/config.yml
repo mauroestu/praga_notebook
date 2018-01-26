@@ -33,6 +33,7 @@ framework:
     php_errors:
         log: true
 
+nelmio_api_doc: ~
 
 # Doctrine Migrations
 doctrine_migrations:
@@ -45,7 +46,7 @@ doctrine_migrations:
 #FosUserBundle
 fos_user:
     db_driver: orm
-    firewall_name: main
+    firewall_name: api
     user_class: AppBundle\Entity\User
     from_email:
         address: "mauroestu18@gmail.com"
@@ -59,22 +60,32 @@ nelmio_cors:
         allow_origin: ['*']
         allow_headers: ['*']
         allow_methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
-        max_age: 3600
+        max_age: 3900
         hosts: []
         origin_regex: false
 
 # FOSRest Configuration
 fos_rest:
-    body_listener: true
+    routing_loader:
+        default_format: json                            # All responses should be JSON formated
+        include_format: false                           # We do not include format in request, so that all responses
+                                                        # will eventually be JSON formated
     format_listener:
         rules:
             - { path: '^/api', priorities: ['json'], fallback_format: json, prefer_extension: true }
             - { path: ^/, priorities: [ html ], fallback_format: html, prefer_extension: true }
-    param_fetcher_listener: true
     view:
-        view_response_listener: 'force'
-        formats:
-            json: true
+        view_response_listener: true
+
+# Fos oauth server:
+fos_oauth_server:
+    db_driver:           orm
+    client_class:        AppBundle\Entity\Client
+    access_token_class:  AppBundle\Entity\AccessToken
+    refresh_token_class: AppBundle\Entity\RefreshToken
+    auth_code_class:     AppBundle\Entity\AuthCode
+    service:
+        user_provider: fos_user.user_provider.username
 
 #NelmioApiDocBundle
 #nelmio_api_doc:

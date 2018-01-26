@@ -4,3 +4,10 @@ api:
 
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+
+NelmioApiDocBundle:
+    resource: "@NelmioApiDocBundle/Resources/config/routing/swaggerui.xml"
+    prefix:   /api/doc
+
+fos_oauth_server_token:
+    resource: "@FOSOAuthServerBundle/Resources/config/routing/token.xml"
